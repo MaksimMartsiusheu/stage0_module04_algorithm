@@ -36,7 +36,7 @@ class AlgorithmComplexityTest {
 
     @Test
     public void arrayItemAccess() {
-        assertEquals(3, encodedComplexities.indexOf(encodeAnswer(algorithmComplexity.arrayItemAccess())));
+        assertEquals(3, encodedComplexities.indexOf(encodeAnswer(algorithmComplexity.arrayIndexItemAccess())));
     }
 
     private String encodeAnswer(Complexity complexity) {

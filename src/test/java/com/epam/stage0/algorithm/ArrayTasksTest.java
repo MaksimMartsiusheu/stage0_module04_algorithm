@@ -1,11 +1,14 @@
 package com.epam.stage0.algorithm;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ArrayTasksTest {
@@ -25,20 +29,21 @@ public class ArrayTasksTest {
 
     private final ArrayTasks arrayTasks = new ArrayTasks();
 
-//    @BeforeAll
-//    public static void shouldNotUserUtils() throws IOException {
-//        List<String> notAllowedStrings = Files.readAllLines(
-//                        Path.of("src/main/java/com/epam/stage0/algorithm/ArrayTasks.java")
-//                ).stream()
-//                .filter(line -> line.contains("import"))
-//                .collect(Collectors.toList());
-//
-//        assertTrue(notAllowedStrings.isEmpty(), "You use some not allowed utils, such as java.util.Arrays");
-//    }
+    @BeforeAll
+    public static void shouldNotUserUtils() throws IOException {
+        List<String> notAllowedStrings = Files.readAllLines(
+                        Path.of("src/main/java/com/epam/stage0/algorithm/ArrayTasks.java")
+                ).stream()
+                .filter(line -> line.contains("import"))
+                .collect(Collectors.toList());
+
+        assertFalse(notAllowedStrings.isEmpty(), "You use some not allowed utils, such as java.util.Arrays");
+    }
 
     @Test
     public void seasonsArrayTest() {
-        assertArrayEquals(Stream.of("winter", "spring", "summer", "autumn").toArray(), arrayTasks.seasonsArray(),
+        assertArrayEquals(Stream.of("winter", "spring", "summer", "autumn").toArray(),
+                Arrays.stream(arrayTasks.seasonsArray()).map(String::toLowerCase).toArray(),
                 "I think, you have mistake in order or name of season");
     }
 
@@ -86,13 +91,13 @@ public class ArrayTasksTest {
 
 
     private static Stream<Arguments> totalSumTestProvider() {
-        return getIntArraysStream(5, 100, 1000)
+        return getIntArraysStream(4, 100, 1000)
                 .map(arr -> Arguments.of(arr, Arrays.stream(arr).sum()));
     }
 
     private static Stream<Arguments> sortRaggedArrayProvider() {
 
-        return RANDOM.ints(5, 1, 5)
+        return RANDOM.ints(8, 1, 5)
                 .mapToObj(i -> getIntArraysStream(5, 1, 5)
                         .collect(Collectors.toList()))
                 .map(arrList -> {
@@ -125,7 +130,7 @@ public class ArrayTasksTest {
     }
 
     private static Stream<Arguments> generatedNumbersTestProvider() {
-        return RANDOM.ints(5, 3, 10000)
+        return RANDOM.ints(4, 3, 10000)
                 .mapToObj(length -> IntStream.range(1, length + 1)
                         .toArray())
                 .map(arr -> Arguments.of(arr.length, arr));
@@ -146,7 +151,7 @@ public class ArrayTasksTest {
     }
 
     private static Stream<Arguments> getOnlyPositiveNumbersTestProvider() {
-        return getIntArraysStream(5, 1000, 5000)
+        return getIntArraysStream(6, 1000, 5000)
                 .map(arr -> Arguments.of(arr, Arrays.stream(arr).filter(i -> i > 0).toArray()));
     }
 
